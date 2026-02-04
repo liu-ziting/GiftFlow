@@ -1,5 +1,132 @@
-# Vue 3 + TypeScript + Vite
+# GiftFlow - 礼物抽奖管理系统
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+GiftFlow 是一个基于 Cloudflare 生态系统（Pages, Functions, D1）开发的礼物抽奖与交换管理系统。它支持多分组管理、邀请码机制、以及管理员全局操控抽奖逻辑。
 
-Learn more about the recommended Project Setup and IDE Support in the [Vue Docs TypeScript Guide](https://vuejs.org/guide/typescript/overview.html#project-setup).
+## 🌟 项目特点
+
+- **多分组管理**：通过邀请码将用户划分到不同的小组，支持多活动并行。
+- **循环抽奖逻辑**：采用偏移算法确保抽奖结果形成闭环（A -> B -> C -> A），保证每人都能送出并收到一份礼物。
+- **管理员权限**：管理员（Admin）拥有全局管理权限，可监控各组参与人数、一键开启抽奖并查看配对名单。
+- **隐私与安全**：
+    - 成员仅在抽奖结束后可见自己的收件人详细信息（姓名、电话、地址）。
+    - 管理员仅能查看姓名配对，无法获取用户私人地址，保护隐私。
+- **极简 UI/UX**：基于 Tailwind CSS 4 构建的深色系现代界面，配合流体动画，提供极致的使用体验。
+
+## 🛠️ 技术栈
+
+- **前端**: [Vue.js 3](https://vuejs.org/) (Composition API) + [Vite](https://vitejs.dev/)
+- **路由**: [Vue Router 5](https://router.vuejs.org/)
+- **样式**: [Tailwind CSS 4](https://tailwindcss.com/)
+- **图标**: [Lucide Vue Next](https://lucide.dev/)
+- **后端**: [Hono](https://hono.dev/) (高性能 Web 框架)
+- **部署**: [Cloudflare Pages Functions](https://pages.cloudflare.com/)
+- **存储**: [Cloudflare D1](https://developers.cloudflare.com/d1/) (边缘端 SQLite)
+
+## 🎨 UI 设计理念
+
+项目采用了现代化的**深色玻璃拟态（Glassmorphism）**设计风格：
+
+- **色彩方案**：以 `Slate-950` 为底色，搭配 `Indigo` 和 `Violet` 渐变色作为品牌主色调。
+- **交互反馈**：自定义 `useModal` 弹窗系统，提供平滑的入场与退场动画。
+- **响应式**：完美适配移动端与桌面端，确保在不同设备上都有良好的视觉呈现。
+
+## 🔒 安全机制
+
+- **JWT 认证**：基于 JSON Web Token 的无状态身份验证，确保接口调用的安全性。
+- **身份鉴权中间件**：后端通过 Hono 中间件对 Admin 和普通用户进行严格的路由级访问控制。
+- **密码加密**：用户密码在数据库中安全存储。
+
+## 🚀 本地运行指南
+
+### 1. 克隆与安装
+
+```bash
+git clone <repository-url>
+cd GiftFlow
+npm install
+```
+
+### 2. 本地数据库初始化
+
+运行迁移文件以创建本地 D1 数据库：
+
+```bash
+npx wrangler d1 migrations apply giftflow --local
+```
+
+### 3. 启动开发服务器
+
+启动全栈开发环境（同时运行 Vite 前端和 Wrangler Pages 后端代理）：
+
+```bash
+npm run pages:dev
+```
+
+- 前端地址：`http://localhost:5173`
+- 后端 API：通过 `localhost:8788` 代理转发
+
+### 4. 初始化管理员
+
+在本地 D1 数据库中插入管理员账号：
+
+```bash
+npx wrangler d1 execute giftflow --local --command="INSERT INTO users (username, password, is_admin) VALUES ('admin', '1313ljjmtdsxxx', 1);"
+```
+
+---
+
+## 🌐 线上部署指南
+
+### 1. 配置 `wrangler.toml`
+
+将您的 D1 `database_id` 填入 `wrangler.toml`：
+
+```toml
+[[d1_databases]]
+binding = "DB"
+database_name = "giftflow"
+database_id = "your-d1-id-here"
+```
+
+### 2. 线上数据库同步
+
+```bash
+npx wrangler d1 migrations apply giftflow --remote
+```
+
+### 3. 构建与部署
+
+```bash
+npm run deploy
+```
+
+---
+
+## 📂 核心架构
+
+```text
+├── functions/api/         # 后端逻辑
+│   └── [[route]].ts       # Hono API 路由定义与控制器
+├── migrations/            # 数据库 Schema (D1 Migrations)
+├── src/
+│   ├── views/             # 视图组件 (Home 为核心管理/参与界面)
+│   ├── useModal.ts        # 全局弹窗状态管理 Hook
+│   ├── style.css          # Tailwind 4 指令与自定义动画
+│   └── api.ts             # 封装 Axios 请求拦截器
+└── wrangler.toml          # Cloudflare 环境配置
+```
+
+## 🛠️ 后端主要接口
+
+| 路径                      | 方法 | 描述                         | 权限   |
+| :------------------------ | :--- | :--------------------------- | :----- |
+| `/auth/login`             | POST | 用户登录                     | 公开   |
+| `/status`                 | GET  | 获取当前用户状态、分组信息   | 需登录 |
+| `/admin/draw/:id`         | POST | 开启指定小组抽奖             | 管理员 |
+| `/admin/draw-results/:id` | GET  | 查看小组姓名配对结果         | 管理员 |
+| `/my-gift`                | GET  | 获取自己需要赠送的收件人信息 | 成员   |
+
+## 📝 许可证
+
+MIT License
+
