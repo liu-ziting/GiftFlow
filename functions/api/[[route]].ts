@@ -168,11 +168,11 @@ app.get('/my-gift', auth, async c => {
     const payload = c.get('jwtPayload')
     const db = c.env.DB
 
-    // Get the address I need to send a gift to
+    // Get the info of who I need to send a gift to
     const result = await db
         .prepare(
             `
-    SELECT u.address 
+    SELECT u.real_name, u.phone, u.address 
     FROM draw_results d
     JOIN users u ON d.receiver_id = u.id
     WHERE d.giver_id = ? AND d.invite_code_id = ?

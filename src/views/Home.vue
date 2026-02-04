@@ -166,7 +166,7 @@ const handleViewResults = async (inviteCode: any) => {
 
 const copyAddress = () => {
     if (!myGift.value) return
-    const text = myGift.value.address
+    const text = `收件人: ${myGift.value.real_name}\n电话: ${myGift.value.phone}\n地址: ${myGift.value.address}`
     navigator.clipboard.writeText(text)
     copied.value = true
     setTimeout(() => (copied.value = false), 2000)
@@ -254,17 +254,29 @@ onMounted(fetchData)
 
                         <div class="relative z-10 flex flex-col md:flex-row gap-12 items-start">
                             <div class="space-y-8 flex-1">
-                                <div class="space-y-2">
-                                    <p class="text-primary font-bold tracking-widest text-xs uppercase opacity-80">你需要寄送礼物的地址</p>
-                                    <h3 class="text-2xl md:text-3xl font-black leading-relaxed text-slate-100">
-                                        {{ myGift.address }}
-                                    </h3>
+                                <div class="space-y-6">
+                                    <p class="text-primary font-bold tracking-widest text-xs uppercase opacity-80">你需要寄送礼物的对象信息</p>
+
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                        <div class="space-y-2">
+                                            <p class="text-slate-500 font-bold text-xs uppercase tracking-widest">收件人</p>
+                                            <p class="text-2xl font-black text-slate-100">{{ myGift.real_name }}</p>
+                                        </div>
+                                        <div class="space-y-2">
+                                            <p class="text-slate-500 font-bold text-xs uppercase tracking-widest">联系电话</p>
+                                            <p class="text-2xl font-black text-slate-100">{{ myGift.phone }}</p>
+                                        </div>
+                                        <div class="md:col-span-2 space-y-2">
+                                            <p class="text-slate-500 font-bold text-xs uppercase tracking-widest">收货地址</p>
+                                            <p class="text-xl font-bold leading-relaxed text-slate-200">{{ myGift.address }}</p>
+                                        </div>
+                                    </div>
                                 </div>
 
                                 <button @click="copyAddress" class="btn-primary !bg-white !text-slate-900 !shadow-none hover:!bg-slate-100 mt-4">
                                     <Check v-if="copied" class="w-5 h-5 text-green-500" />
                                     <Copy v-else class="w-5 h-5" />
-                                    <span>{{ copied ? '已复制地址' : '复制收货地址' }}</span>
+                                    <span>{{ copied ? '已复制全部信息' : '一键复制寄送信息' }}</span>
                                 </button>
                             </div>
 
