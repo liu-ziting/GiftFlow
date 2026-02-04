@@ -1,21 +1,24 @@
 <script setup lang="ts">
 import { ref, onMounted, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
+import { Gift, User, LogOut, LayoutDashboard } from 'lucide-vue-next'
+import { useModal, getIcon, getIconClass } from './useModal'
 
+const { isVisible, options, confirm, cancel } = useModal()
 const router = useRouter()
 const route = useRoute()
 const isLogged = ref(false)
-const user = ref<any>(null)
+const userData = ref<any>(null)
 
 const checkAuth = () => {
     const token = localStorage.getItem('token')
-    const userData = localStorage.getItem('user')
-    if (token && userData) {
+    const storedUser = localStorage.getItem('user')
+    if (token && storedUser) {
         isLogged.value = true
-        user.value = JSON.parse(userData)
+        userData.value = JSON.parse(storedUser)
     } else {
         isLogged.value = false
-        user.value = null
+        userData.value = null
     }
 }
 
@@ -27,51 +30,78 @@ const handleLogout = () => {
 }
 
 onMounted(checkAuth)
-
-// Re-check auth when route changes or after login
 watch(() => route.path, checkAuth)
 </script>
 
 <template>
     <div class="min-h-screen flex flex-col">
         <!-- Navbar -->
-        <nav class="h-16 border-b border-slate-50 bg-white/80 backdrop-blur-md sticky top-0 z-50 flex items-center justify-between px-8">
-            <router-link to="/" class="flex items-center gap-2">
-                <div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center text-white font-bold">GF</div>
-                <span class="text-xl font-bold tracking-tight">GiftFlow</span>
+        <nav class="h-20 bg-white/70 backdrop-blur-xl sticky top-0 z-50 flex items-center justify-between px-6 md:px-12 border-b border-primary/5">
+            <router-link to="/" class="flex items-center gap-3 group shrink-0">
+                <div class="w-10 h-10 bg-primary rounded-2xl flex items-center justify-center text-white shadow-lg shadow-primary/20 transition-transform group-hover:rotate-12">
+                    <Gift class="w-6 h-6" />
+                </div>
+                <span class="text-2xl font-black tracking-tighter hidden sm:block bg-gradient-to-r from-primary to-primary-hover bg-clip-text text-transparent">GiftFlow</span>
             </router-link>
 
-            <div class="flex items-center gap-6">
+            <div class="flex items-center gap-2 md:gap-4 p-1.5 bg-slate-100/50 rounded-2xl">
                 <template v-if="isLogged">
-                    <router-link to="/" class="text-sm font-medium hover:text-primary transition-colors" :class="{ 'text-primary': route.path === '/' }">活动</router-link>
-                    <router-link to="/profile" class="text-sm font-medium hover:text-primary transition-colors" :class="{ 'text-primary': route.path === '/profile' }"
-                        >地址</router-link
-                    >
-                    <div class="h-4 w-[1px] bg-slate-200"></div>
-                    <span class="text-sm font-mono text-slate-400">> {{ user?.username }}</span>
-                    <button @click="handleLogout" class="text-sm text-slate-400 hover:text-red-500 transition-colors">Logout</button>
+                    <router-link to="/" class="nav-link" :class="{ 'nav-link-active': route.path === '/' }">
+                        <LayoutDashboard class="w-4 h-4" />
+                        <span class="hidden md:inline">活动中心</span>
+                    </router-link>
+                    <router-link to="/profile" class="nav-link" :class="{ 'nav-link-active': route.path === '/profile' }">
+                        <User class="w-4 h-4" />
+                        <span class="hidden md:inline">收货信息</span>
+                    </router-link>
+                    <button @click="handleLogout" class="nav-link text-slate-400 hover:text-red-500 hover:bg-red-50">
+                        <LogOut class="w-4 h-4" />
+                    </button>
                 </template>
                 <template v-else-if="route.path !== '/login' && route.path !== '/register'">
-                    <router-link to="/login" class="text-sm font-bold hover:text-primary transition-colors">Login</router-link>
-                    <router-link to="/register" class="btn-primary py-1.5 px-4 text-sm">Register</router-link>
+                    <router-link to="/login" class="nav-link">登录</router-link>
+                    <router-link to="/register" class="btn-primary !px-5 !py-2 !rounded-xl !text-sm">注册</router-link>
                 </template>
             </div>
         </nav>
 
         <!-- Main Content -->
-        <main class="flex-1 container mx-auto px-4">
+        <main class="flex-1 max-w-7xl mx-auto w-full px-6 md:px-12 py-8">
             <router-view></router-view>
         </main>
 
         <!-- Footer -->
-        <footer class="py-12 text-center text-slate-300 text-xs font-mono">
-            <div class="flex justify-center gap-4 mb-4">
-                <span class="hover:text-slate-400 cursor-pointer">Terms</span>
-                <span class="hover:text-slate-400 cursor-pointer">Privacy</span>
-                <span class="hover:text-slate-400 cursor-pointer">GitHub</span>
+        <footer class="py-12 text-center text-slate-400 text-sm font-medium">
+            <div class="flex items-center justify-center gap-2 mb-2">
+                <div class="w-1.5 h-1.5 rounded-full bg-primary/30"></div>
+                <p>让礼物传递惊喜与温暖</p>
+                <div class="w-1.5 h-1.5 rounded-full bg-primary/30"></div>
             </div>
-            &copy; 2026 GiftFlow. Built with Cloudflare D1 & Workers.
+            <p class="opacity-50">&copy; 2026 GiftFlow. Built with ❤️ for Gifting.</p>
         </footer>
+
+        <!-- Global Modal -->
+        <div v-if="isVisible" class="modal-overlay" @click.self="cancel">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div :class="['w-16 h-16 rounded-3xl flex items-center justify-center', getIconClass(options.type)]">
+                        <component :is="getIcon(options.type)" class="w-8 h-8" />
+                    </div>
+                    <h3 class="text-2xl font-black text-slate-900">{{ options.title }}</h3>
+                </div>
+                <div class="modal-body">
+                    {{ options.message }}
+                </div>
+                <div class="modal-footer">
+                    <button v-if="options.type === 'confirm'" @click="cancel" class="btn-secondary flex-1">
+                        {{ options.cancelText }}
+                    </button>
+                    <button @click="confirm" :class="['btn-primary flex-1', options.type === 'error' ? '!bg-red-500 !shadow-red-200' : '']">
+                        {{ options.confirmText }}
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 

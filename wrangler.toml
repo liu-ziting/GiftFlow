@@ -2,7 +2,7 @@ name = "giftflow"
 pages_build_output_dir = "dist"
 
 [[d1_databases]]
-binding = "giftflow"
+binding = "DB"
 database_name = "giftflow"
-database_id = "914e3f49-bc46-4458-bd8d-00faea64e354" # This will be filled after creation or used locally
+database_id = "914e3f49-bc46-4458-bd8d-00faea64e354"
 migrations_dir = "migrations"
