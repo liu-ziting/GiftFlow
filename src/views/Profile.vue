@@ -45,21 +45,21 @@ onMounted(fetchProfile)
 </script>
 
 <template>
-    <div class="max-w-3xl mx-auto py-8">
+    <div class="max-w-3xl mx-auto py-6 md:py-8">
         <div class="gift-card overflow-hidden">
-            <div class="gift-card-header !py-6 !px-8">
+            <div class="gift-card-header !py-6 !px-6 md:!px-8">
                 <div class="flex items-center gap-3">
                     <div class="w-10 h-10 bg-primary/10 text-primary rounded-xl flex items-center justify-center">
                         <User class="w-5 h-5" />
                     </div>
                     <div>
-                        <h2 class="text-2xl font-black">收货信息</h2>
-                        <p class="text-xs text-slate-400 font-medium mt-0.5">请确保信息准确，以便伙伴能准确寄送礼物</p>
+                        <h2 class="text-xl md:text-2xl font-black">收货信息</h2>
+                        <p class="text-[10px] md:text-xs text-slate-400 font-medium mt-0.5">请确保信息准确，以便伙伴能准确寄送礼物</p>
                     </div>
                 </div>
             </div>
 
-            <div class="p-8 md:p-12">
+            <div class="p-6 md:p-12">
                 <div v-if="loading" class="flex flex-col items-center justify-center py-12 space-y-4">
                     <Loader2 class="w-8 h-8 text-primary/30 animate-spin" />
                     <p class="text-slate-400 font-bold text-xs uppercase tracking-widest">加载中...</p>

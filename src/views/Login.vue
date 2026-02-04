@@ -27,9 +27,9 @@ const handleLogin = async () => {
 </script>
 
 <template>
-    <div class="flex items-center justify-center min-h-[calc(100vh-160px)] px-6">
-        <div class="gift-card w-full max-w-md">
-            <div class="gift-card-header !py-6 !px-8">
+    <div class="flex items-center justify-center min-h-[calc(100vh-160px)]">
+        <div class="gift-card w-full max-w-lg">
+            <div class="gift-card-header !py-6 !px-6 md:!px-8">
                 <div class="flex items-center gap-3">
                     <div class="w-10 h-10 bg-primary/10 text-primary rounded-xl flex items-center justify-center">
                         <Gift class="w-5 h-5" />
@@ -41,7 +41,7 @@ const handleLogin = async () => {
                 </div>
             </div>
 
-            <div class="p-8 md:p-10">
+            <div class="p-6 md:p-10">
                 <form @submit.prevent="handleLogin" class="space-y-6">
                     <div class="space-y-2">
                         <label class="flex items-center gap-2 text-sm font-black text-slate-700 ml-1">

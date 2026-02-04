@@ -36,7 +36,7 @@ watch(() => route.path, checkAuth)
 <template>
     <div class="min-h-screen flex flex-col">
         <!-- Navbar -->
-        <nav class="h-20 bg-white/70 backdrop-blur-xl sticky top-0 z-50 flex items-center justify-between px-6 md:px-12 border-b border-primary/5">
+        <nav class="h-20 bg-white/70 backdrop-blur-xl sticky top-0 z-50 flex items-center justify-between px-4 md:px-12 border-b border-primary/5">
             <router-link to="/" class="flex items-center gap-3 group shrink-0">
                 <div class="w-10 h-10 bg-primary rounded-2xl flex items-center justify-center text-white shadow-lg shadow-primary/20 transition-transform group-hover:rotate-12">
                     <Gift class="w-6 h-6" />
@@ -66,7 +66,7 @@ watch(() => route.path, checkAuth)
         </nav>
 
         <!-- Main Content -->
-        <main class="flex-1 max-w-7xl mx-auto w-full px-6 md:px-12 py-8">
+        <main class="flex-1 max-w-7xl mx-auto w-full px-4 md:px-12 py-6 md:py-8">
             <router-view></router-view>
         </main>
 

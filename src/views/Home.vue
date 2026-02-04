@@ -182,20 +182,20 @@ onMounted(fetchData)
             <p class="text-slate-400 font-bold tracking-widest text-xs uppercase">正在连接礼物中心...</p>
         </div>
 
-        <div v-else class="space-y-12">
+        <div v-else class="space-y-8 md:space-y-12">
             <!-- Hero Section -->
-            <section class="relative overflow-hidden gift-card p-8 md:p-12">
+            <section class="relative overflow-hidden gift-card p-6 md:p-12">
                 <div class="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full -mr-32 -mt-32 blur-3xl"></div>
                 <div class="absolute bottom-0 left-0 w-64 h-64 bg-secondary/10 rounded-full -ml-32 -mb-32 blur-3xl"></div>
 
-                <div class="relative z-10 flex flex-col md:flex-row items-center gap-12">
-                    <div class="flex-1 space-y-6 text-center md:text-left">
-                        <div class="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 text-primary rounded-full text-xs font-bold uppercase tracking-wider">
+                <div class="relative z-10 flex flex-col md:flex-row items-center gap-8 md:gap-12">
+                    <div class="flex-1 space-y-4 md:space-y-6 text-center md:text-left">
+                        <div class="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 text-primary rounded-full text-[10px] md:text-xs font-bold uppercase tracking-wider">
                             <PartyPopper class="w-4 h-4" />
                             <span>新年礼物交换活动</span>
                         </div>
-                        <h1 class="text-4xl md:text-6xl font-black leading-tight">让每一份礼物<br /><span class="text-primary">都充满惊喜</span></h1>
-                        <p class="text-slate-500 text-lg leading-relaxed max-w-xl">
+                        <h1 class="text-3xl md:text-6xl font-black leading-tight">让每一份礼物<br /><span class="text-primary">都充满惊喜</span></h1>
+                        <p class="text-slate-500 text-base md:text-lg leading-relaxed max-w-xl">
                             GiftFlow 是一个温暖的群组礼物交换平台。大家先填写收货地址并参与活动，最后由发起人开启“大风吹”抽奖，每个人都会随机获得一个人的地址。
                         </p>
 
@@ -248,39 +248,39 @@ onMounted(fetchData)
                     <h2 class="text-2xl font-black">我的中奖结果</h2>
                 </div>
 
-                <div v-if="myGift" class="gift-card bg-gradient-to-br from-primary to-primary-hover p-1 text-white">
-                    <div class="bg-slate-900 rounded-[calc(1.5rem-2px)] p-8 md:p-12 relative overflow-hidden">
+                <div v-if="myGift" class="gift-card bg-gradient-to-br from-primary to-primary-hover p-0.5 text-white">
+                    <div class="bg-slate-900 rounded-[calc(1.5rem-2px)] p-6 md:p-12 relative overflow-hidden">
                         <div class="absolute top-0 right-0 w-96 h-96 bg-primary/20 rounded-full -mr-48 -mt-48 blur-3xl"></div>
 
-                        <div class="relative z-10 flex flex-col md:flex-row gap-12 items-start">
-                            <div class="space-y-8 flex-1">
-                                <div class="space-y-6">
-                                    <p class="text-primary font-bold tracking-widest text-xs uppercase opacity-80">你需要寄送礼物的对象信息</p>
+                        <div class="relative z-10 flex flex-col md:flex-row gap-8 md:gap-12 items-start">
+                            <div class="space-y-6 md:space-y-8 flex-1 w-full">
+                                <div class="space-y-4 md:space-y-6">
+                                    <p class="text-primary font-bold tracking-widest text-[10px] md:text-xs uppercase opacity-80">你需要寄送礼物的对象信息</p>
 
-                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                                        <div class="space-y-2">
-                                            <p class="text-slate-500 font-bold text-xs uppercase tracking-widest">收件人</p>
-                                            <p class="text-2xl font-black text-slate-100">{{ myGift.real_name }}</p>
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 md:gap-8">
+                                        <div class="space-y-1 md:space-y-2">
+                                            <p class="text-slate-500 font-bold text-[10px] md:text-xs uppercase tracking-widest">收件人</p>
+                                            <p class="text-xl md:text-2xl font-black text-slate-100">{{ myGift.real_name }}</p>
                                         </div>
-                                        <div class="space-y-2">
-                                            <p class="text-slate-500 font-bold text-xs uppercase tracking-widest">联系电话</p>
-                                            <p class="text-2xl font-black text-slate-100">{{ myGift.phone }}</p>
+                                        <div class="space-y-1 md:space-y-2">
+                                            <p class="text-slate-500 font-bold text-[10px] md:text-xs uppercase tracking-widest">联系电话</p>
+                                            <p class="text-xl md:text-2xl font-black text-slate-100">{{ myGift.phone }}</p>
                                         </div>
-                                        <div class="md:col-span-2 space-y-2">
-                                            <p class="text-slate-500 font-bold text-xs uppercase tracking-widest">收货地址</p>
-                                            <p class="text-xl font-bold leading-relaxed text-slate-200">{{ myGift.address }}</p>
+                                        <div class="sm:col-span-2 space-y-1 md:space-y-2">
+                                            <p class="text-slate-500 font-bold text-[10px] md:text-xs uppercase tracking-widest">收货地址</p>
+                                            <p class="text-lg md:text-xl font-bold leading-relaxed text-slate-200">{{ myGift.address }}</p>
                                         </div>
                                     </div>
                                 </div>
 
-                                <button @click="copyAddress" class="btn-primary !bg-white !text-slate-900 !shadow-none hover:!bg-slate-100 mt-4">
+                                <button @click="copyAddress" class="btn-primary !bg-white !text-slate-900 !shadow-none hover:!bg-slate-100 mt-2 md:mt-4 w-full sm:w-auto">
                                     <Check v-if="copied" class="w-5 h-5 text-green-500" />
                                     <Copy v-else class="w-5 h-5" />
                                     <span>{{ copied ? '已复制全部信息' : '一键复制寄送信息' }}</span>
                                 </button>
                             </div>
 
-                            <div class="hidden md:block w-48 h-48 bg-primary/10 rounded-full flex items-center justify-center border-2 border-primary/20 animate-bounce">
+                            <div class="hidden md:flex w-48 h-48 bg-primary/10 rounded-full items-center justify-center border-2 border-primary/20 animate-bounce shrink-0">
                                 <Gift class="w-24 h-24 text-primary" />
                             </div>
                         </div>
