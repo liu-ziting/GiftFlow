@@ -16,7 +16,7 @@ const router = createRouter({
     routes
 })
 
-router.beforeEach((to, from, next) => {
+router.beforeEach((to, _from, next) => {
     const token = localStorage.getItem('token')
     if (!token && to.path !== '/login' && to.path !== '/register') {
         next('/login')
